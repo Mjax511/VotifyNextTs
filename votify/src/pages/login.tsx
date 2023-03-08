@@ -5,7 +5,7 @@ export default function() {
   const client_id = 'd61d9c2cce0241c1bee240e797303b23';
   const url = 'https://accounts.spotify.com/authorize?';
   const redirect_uri = 'http://localhost:3000/auth-check'
-  const scope = '';
+  const scope = 'playlist-read-collaborative playlist-modify-public';
 
   return (
     <div>

@@ -4,7 +4,6 @@ import type { NextRequest } from 'next/server'
 const Buffer = require('buffer/').Buffer;
 
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next();
 
   if (req.nextUrl.pathname.startsWith('/auth-check')) {
     const code = req.nextUrl.searchParams.get("code");
@@ -37,11 +36,13 @@ export async function middleware(req: NextRequest) {
       data = await token_res.json();
       const access_token = data.access_token;
       const refresh_token = data.refresh_token;
+
+
       const userEndpoint = 'https://api.spotify.com/v1/me';
       //
       const userHeaders = new Headers();
       userHeaders.append('Authorization', `Bearer ${access_token}`);
-      myHeaders.append('Content-Type', 'application/json');
+      userHeaders.append('Content-Type', 'application/json');
 
       const userRequestOptions = {
         method: 'get',
@@ -50,35 +51,33 @@ export async function middleware(req: NextRequest) {
 
 
 
-      const user = await fetch(userEndpoint, {...userRequestOptions})
+      const user = await fetch(userEndpoint, { ...userRequestOptions })
       data = await user.json();
       console.log(data);
 
-      const postResponse = await fetch('http://localhost:3000/api/users',{
+      const postHeaders = new Headers();
+      postHeaders.append('Content-Type', 'application/json');
+      const postResponse = await fetch('http://localhost:3000/api/users', {
         method: "POST",
-        body: JSON.stringify({access_token, refresh_token, spotify_id: data.id})
-      } )
-      // res.cookies.set('sAT', access_token)
-      // res.cookies.set('sRT', refresh_token)
+        body: JSON.stringify({ access_token, refresh_token, spotify_id: data.id }),
+        headers: postHeaders,
+      })
+      const res = NextResponse.redirect(new URL('/test', req.url));
+      res.cookies.set('sAT', access_token)
+      res.cookies.set('sRT', refresh_token)
 
       // console.log(req.cookies.getAll())
       // console.log(res.cookies.getAll())
       // console.log('after request: ', token_res)
+      return res;
     } else {
       console.log('no authorization code')
     }
 
-    return NextResponse.redirect(new URL('/test', req.url));
   } else if (req.nextUrl.pathname.startsWith('/log-cookies')) {
-    // const res = NextResponse.next();
-    req.cookies.delete('secret')
-    res.cookies.set('test', 'log-cookie')
-    res.cookies.set({ name: 'test', value: 'log-cookie', path: '/log-cookie' })
-    //
+    const res = NextResponse.next();
     console.log(req.cookies.getAll())
-    console.log(res.cookies.getAll())
-
-    await fetch('http://localhost:3000/api/users', { method: "POST", body: JSON.stringify({ name: "Matt" }) })
+    // console.log(res.cookies.getAll())
 
     return res;
   }

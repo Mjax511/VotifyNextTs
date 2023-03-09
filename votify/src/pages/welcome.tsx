@@ -26,7 +26,7 @@ export default function() {
   return (
     <div>
       <div>{`Welcome ${JSON.stringify(data)}`}</div>
-      <a href = "http://localhost:3000/playlists">Go to your playlists</a>
+      <a href = "http://localhost:3000/playlist">Go to your playlists</a>
     </div>
   )
 }

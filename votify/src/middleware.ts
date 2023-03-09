@@ -62,9 +62,10 @@ export async function middleware(req: NextRequest) {
         body: JSON.stringify({ access_token, refresh_token, spotify_id: data.id }),
         headers: postHeaders,
       })
-      const res = NextResponse.redirect(new URL('/test', req.url));
+      const res = NextResponse.redirect(new URL('/welcome', req.url));
       res.cookies.set('sAT', access_token)
       res.cookies.set('sRT', refresh_token)
+      res.cookies.set('s_id', data.id)
 
       // console.log(req.cookies.getAll())
       // console.log(res.cookies.getAll())

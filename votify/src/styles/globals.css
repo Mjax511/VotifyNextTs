@@ -105,3 +105,30 @@ a {
     color-scheme: dark;
   }
 }
+
+
+.playlistContainer{
+  color: green;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+} 
+
+.playlistChild {
+  background-color: grey;
+  margin: 5px;
+  display: flex;
+  flex-direction: column;
+  height : 200px;
+  border: 5px;
+  border-style: solid;
+  border-color:white;
+  color: violet;
+  justify-content: center;
+  align-items: center;
+}
+
+img {
+  height: 80px;
+  width: 80px;
+}

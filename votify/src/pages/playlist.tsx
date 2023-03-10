@@ -10,7 +10,7 @@ const requestOptions = {
 
 export default function() {
   const [data, setData] = useState('loading')
-  const [click , setClick ] = useState(false)
+  const [click, setClick] = useState(-1)
 
 
   useEffect(() => {
@@ -32,17 +32,23 @@ export default function() {
         tracks: {
           href: string,
           total: number,
-        }[]
+        }
       }[]
     }
+  }
+  const handleClick = (i: number) => {
+    setClick(i);
   }
   const createChildren = (data: Data) => {
     const items = data.data.items;
 
     return items.map((e, i) => (
-      <div key={`unique${i}`} className="playlistChild">
+      <div key={`unique${i}`} className="playlistChild" onClick={(() => handleClick(i))}>
         <div><img src={e.images[0].url} /></div>
         <div>{e.name}</div>
+        <div>{
+          click === i ? `Number of songs: ${e.tracks.total}` : ''
+        }</div>
       </div>
     ));
   }
